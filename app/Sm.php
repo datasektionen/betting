@@ -36,11 +36,11 @@ class Sm extends Model {
                 $winners = [$bet];
                 continue;
             }
-            if ($bet->time->diffInMinutes($sm->ended_at) < $winners[0]->time->diffInMinutes($sm->ended_at)) {
+            if ($bet->time->diffInMinutes($this->ended_at) < $winners[0]->time->diffInMinutes($this->ended_at)) {
                 $winners = [$bet];
                 continue;
             }
-            if ($bet->time->diffInMinutes($sm->ended_at) === $winners[0]->time->diffInMinutes($sm->ended_at)) {
+            if ($bet->time->diffInMinutes($this->ended_at) === $winners[0]->time->diffInMinutes($this->ended_at)) {
                 $winners[] = $bet;
                 continue;
             }
