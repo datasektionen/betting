@@ -41,8 +41,7 @@
             "chmod -R 775 public",
             "mkdir -p bootstrap/cache",
             "chmod -R 775 bootstrap/cache",
-            "php artisan optimize",
-            "php artisan migrate --force"
+            "php artisan optimize"
         ],
         "post-update-cmd": [
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
