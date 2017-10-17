@@ -21,6 +21,10 @@ class Sm extends Model {
         'ended_at'
     ];
 
+    public static function active() {
+        return self::select('*')->orderBy('id', 'DESC')->first();
+    }
+
     public function bets() {
         return $this->hasMany('App\Bet');
     }

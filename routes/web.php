@@ -32,20 +32,19 @@ Route::get('/sm/create/{name}', function ($name) {
 });
 
 Route::get('/', function () {
-	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();
+	$sm = Sm::active();
 	if ($sm === null) {
 		$sm = Sm::create(['name' => 'Budget-SM']);
 	}
+
 	if (!empty($sm->ended_at)) {
 	    return view('ended')
 	    	->with('bets', $sm->bets()->orderBy('time')->get())
 	    	->with('sm', $sm);
 	}
 
-
-
 	if (Auth::user()) {
-		$bet = Auth::user()->bet();
+		$bet = $sm->bets()->where('user_id', Auth::user()->id)->first();
 	} else {
 		$bet = null;
 	}
