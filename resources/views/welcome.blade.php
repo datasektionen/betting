@@ -26,26 +26,7 @@
                 <input type="text" class="time" name="minutes" value="{{ $bet->time->minute < 10 ? '0' : '' }}{{ $bet->time->minute }}" disabled="disabled" />
             </div>
         </div>
-        <h2>Alla gissningar</h2>
-        <table class="onehunna">
-            <thead>
-                <tr>
-                    <th>Namn</th>
-                    <th>Gissning</th>
-                </tr>
-            </thead>
-            @foreach ($bets as $bet) 
-            <tr{!! $bet->time->lt(Carbon\Carbon::now()) ? ' style="opacity: 0.5; background: #fff"' : '' !!}>
-                <td>
-                    {{ $bet->user->name }}
-                </td>
-                <td>
-                    {{ $bet->time->format('H:i') }}
-                </td>
-            </tr>
-            @endforeach
-        </table>
-        @else
+        @elseif (!$sm->isLive())
         <form method="post">
             {{ csrf_field() }}
             <div class="form">
@@ -63,7 +44,32 @@
                 </div>
             </div>
         </form>
-        @endif
+    @endif
+    @endif
+    @if ($sm->isLive())
+    <h2>Alla gissningar</h2>
+    <table class="onehunna">
+        <thead>
+            <tr>
+                <th>Namn</th>
+                <th>Gissning</th>
+            </tr>
+        </thead>
+        @forelse ($bets as $bet) 
+        <tr{!! $bet->time->lt(Carbon\Carbon::now()) ? ' style="opacity: 0.5; background: #fff"' : '' !!}>
+            <td>
+                {{ $bet->user->name }}
+            </td>
+            <td>
+                {{ $bet->time->format('H:i') }}
+            </td>
+        </tr>
+        @empty
+        <tr>
+            <td colspan="2">Det finns inga gissningar att visa.</td>
+        </tr>
+        @endforelse
+    </table>
     @endif
 </div>
 @endsection

@@ -31,6 +31,13 @@ Route::get('/sm/create/{name}', function ($name) {
     return redirect('/');
 });
 
+Route::get('/sm/live', function () {
+	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();
+	$sm->live_at = \Carbon\Carbon::now();
+	$sm->save();
+    return redirect('/');
+});
+
 Route::get('/', function () {
 	$sm = Sm::active();
 	if ($sm === null) {
@@ -51,7 +58,7 @@ Route::get('/', function () {
 
     return view('welcome')
     	->with('bet', $bet)
-    	->with('bets', App\Bet::select('*')->orderBy('time')->get())
+    	->with('bets', $sm->isLive() ? $sm->bets()->orderBy('time')->get() : collect([]))
     	->with('sm', $sm);
 });
 
@@ -59,10 +66,13 @@ Route::post('/', function (Request $request) {
 	if (empty($request->input('hours')) || empty($request->input('minutes'))) {
 		return redirect('/')->with('error', 'Fyll i tiden!');
 	}
-	if (Auth::user()->hasBetted()) {
+	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();
+	if (Auth::user()->hasBetted($sm)) {
 		return redirect('/')->with('error', 'Du kan ju inte betta när du redan har bettat!');
 	}
-	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();
+	if ($sm->isLive()) {
+		return redirect('/')->with('error', 'Tyvärr är du för sent ute för att få vara med i leken');
+	}
 	$bet = App\Bet::create([
 		'user_id' => Auth::user()->id, 
 		'time' => Carbon::create(

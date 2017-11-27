@@ -18,7 +18,8 @@ class Sm extends Model {
         'name'
     ];
     protected $dates = [
-        'ended_at'
+        'ended_at',
+        'live_at'
     ];
 
     public static function active() {
@@ -27,6 +28,10 @@ class Sm extends Model {
 
     public function bets() {
         return $this->hasMany('App\Bet');
+    }
+
+    public function isLive() {
+        return $this->live_at !== null;
     }
 
     public function winningBets() {

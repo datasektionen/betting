@@ -68,8 +68,8 @@ class User extends Authenticatable {
         return $user;
     }
 
-    public function hasBetted() {
-        return Bet::where('user_id', $this->id)->count() > 0;
+    public function hasBetted($sm) {
+        return $sm->bets()->where('user_id', $this->id)->count() > 0;
     }
 
     public function bet() {
