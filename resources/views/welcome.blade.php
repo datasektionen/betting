@@ -31,9 +31,9 @@
             {{ csrf_field() }}
             <div class="form">
                 <div class="input">
-                    <input type="text" class="time" name="hours" placeholder="23" />
+                    <input type="number" min="0" max="23" class="time" name="hours" placeholder="" />
                     <span class="colon">:</span>
-                    <input type="text" class="time" name="minutes" placeholder="59" />
+                    <input type="number" min="0" max="59" class="time" name="minutes" placeholder="" />
                 </div>
                 <div class="input">
                     <input type="submit" class="button theme-color" value="Betta" placeholder="" />
