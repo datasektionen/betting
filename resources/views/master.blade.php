@@ -29,6 +29,7 @@
     <meta name="msapplication-TileColor" content="#ffc107">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffc107">
+    <meta name="robots" content="noindex">
 </head>
 <body>
     <div id="methone-container-replace"></div>
