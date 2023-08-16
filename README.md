@@ -12,6 +12,7 @@ php artisan serve
 ## Prerequisite
 * PHP 7.4.33
 * Composer 2.5.8
+* PostgresQL
 
 ## Setup
 1. Copy .env.example -> .env
