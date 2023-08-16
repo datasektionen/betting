@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>När slutar SM?</title>
+    <title>När slutar Sektionsrundvandringen?</title>
 
     <link href="//aurora.datasektionen.se" rel="stylesheet" type="text/css">
     <link href="/css/style.css" rel="stylesheet" type="text/css">
