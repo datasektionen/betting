@@ -41,7 +41,7 @@ Route::get('/sm/live', function () {
 Route::get('/', function () {
 	$sm = Sm::active();
 	if ($sm === null) {
-		$sm = Sm::create(['name' => 'Budget-SM']);
+		$sm = Sm::create(['name' => 'Sektionsrundvandringen']);
 	}
 
 	if (!empty($sm->ended_at)) {
