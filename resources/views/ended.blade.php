@@ -3,8 +3,8 @@
 @section('main')
 <header>
     <div class="header-inner">
-        <div class="row">
-            <h2>{{ $sm->name }} slutade {{ $sm->ended_at->format('H:i') }}</h2>
+        <div class="row px-2">
+            <h2 class="!text-2xl md:!text-4xl">{{ $sm->name }} slutade {{ $sm->ended_at->format('H:i') }}</h2>
         </div>
         <div class="clear"></div>
     </div>
