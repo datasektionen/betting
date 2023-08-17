@@ -30,15 +30,12 @@
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffc107">
     <meta name="robots" content="noindex">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
     <div id="methone-container-replace"></div>
     <div id="application" class="amber">
         @yield('main')
-
-        <div class="footer">
-            "Det här ser ut som Forex hemsida" - Albin Remnestål 2017-10-17
-        </div>
     </div>
     <script type="text/javascript">
         window.methone_conf = {

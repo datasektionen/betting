@@ -15,7 +15,7 @@ class Bet extends Model {
      * @var array
      */
     protected $fillable = [
-        'time', 'user_id', 'sm_id'
+        'time', 'user_id', 'sm_id', 'n0lle_group'
     ];
 
     protected $dates = [
