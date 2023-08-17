@@ -101,7 +101,7 @@
                 @else {{ $bet->n0lle_group }} @endif
             </td>
             <td>
-                {{ $bet->time->format('H:i') }}
+                {{ isset($bet->user) ? $bet->time->format('H:i') : $bet->time->format('H:i:s') }}
             </td>
         </tr>
         @empty
