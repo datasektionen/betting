@@ -37,8 +37,8 @@
                     <span class="colon !text-2xl">:</span>
                     <input type="number" min="0" max="59" class="time !text-xl !w-32 sm:!w-60 sm:!text-6xl" name="minutes" placeholder="" />
                 </div>
-                <select class="my-10 max-w-[20rem]" name="n0lle_group" id="n0lle_group" required>
-                    <option value="">Välj n0llegrupp</option>
+                <select class="my-10 max-w-[20rem] p-4" name="n0lle_group" id="n0lle_group" required>
+                    <option value="">Välj nØllegrupp</option>
                     <option value="apollo">Apollo</option>
                     <option value="boomer-aang">Boomer-Aang</option>
                     <option value="cosmetisk-comet">Cosmetisk Comet</option>
