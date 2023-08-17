@@ -45,8 +45,16 @@ Route::get('/', function () {
 	}
 
 	if (!empty($sm->ended_at)) {
+        $bets = $sm->bets()->select(DB::raw("to_char(time, 'YYYY-MM-DD HH24:MI:SS') as time"), 'n0lle_group', 'user_id');
+        $bets = $sm
+            ->bets()
+            ->groupBy('n0lle_group')
+            ->select(DB::raw("to_char(to_timestamp(avg((extract(epoch from time)))), 'YYYY-MM-DD HH24:MI:SS') as time"), 'n0lle_group', DB::raw('null as user_id'))
+            ->union($bets)
+            ->orderBy('time')
+            ->get();
 	    return view('ended')
-	    	->with('bets', $sm->bets()->orderBy('time')->get())
+	    	->with('bets', $bets)
 	    	->with('sm', $sm);
 	}
 
