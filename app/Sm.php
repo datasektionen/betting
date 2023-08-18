@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 /**
  * Represents a person. This person can be a nØfflan, personal or other human being.
@@ -46,6 +47,31 @@ class Sm extends Model {
                 continue;
             }
             if ($bet->time->diffInMinutes($this->ended_at) === $winners[0]->time->diffInMinutes($this->ended_at)) {
+                $winners[] = $bet;
+                continue;
+            }
+        }
+        return $winners;
+    }
+
+    public function winningGroups() {
+        $bets = $this
+            ->bets()
+            ->groupBy('n0lle_group')
+            ->select(DB::raw("to_char(to_timestamp(avg((extract(epoch from time)))), 'YYYY-MM-DD HH24:MI:SS') as time"), 'n0lle_group', DB::raw('null as user_id'))
+            ->orderBy('time')
+            ->get();
+        $winners = [];
+        foreach ($bets as $bet) {
+            if (count($winners) === 0) {
+                $winners = [$bet];
+                continue;
+            }
+            if ($bet->time->diffInSeconds($this->ended_at) < $winners[0]->time->diffInSeconds($this->ended_at)) {
+                $winners = [$bet];
+                continue;
+            }
+            if ($bet->time->diffInSeconds($this->ended_at) === $winners[0]->time->diffInSeconds($this->ended_at)) {
                 $winners[] = $bet;
                 continue;
             }
