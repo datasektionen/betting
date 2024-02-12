@@ -34,18 +34,43 @@ class Sm extends Model {
         return $this->live_at !== null;
     }
 
+    /**
+     * Check whether a bet is within the winning interval
+     *
+     */
+    private function isWinner($bet) {
+        $lower = $this->ended_at - 8;
+        $upper = $this->ended_at + 8;
+
+        $timeInMin = $bet->time;
+
+        if ($timeInMin <= upper || $timeInMin >= lower) return true;
+        else return false;
+    }
+
     public function winningBets() {
         $winners = [];
+
+        // Add every bet within winning interval
         foreach ($this->bets as $bet) {
+            if (isWinner($bet)) $winners[] = $bet;
+        }
+
+        if (count($winners) !== 0) return $winners;
+
+        // Fallback: no winner within 15 minutes means look for closest time
+        foreach ($this->bets as $bet) {
+            $betDiff = $bet->time->diffInMinutes($this->ended_at);
+
             if (count($winners) === 0) {
                 $winners = [$bet];
                 continue;
             }
-            if ($bet->time->diffInMinutes($this->ended_at) < $winners[0]->time->diffInMinutes($this->ended_at)) {
+            if ($betDiff < $winners[0]->time->diffInMinutes($this->ended_at)) {
                 $winners = [$bet];
                 continue;
             }
-            if ($bet->time->diffInMinutes($this->ended_at) === $winners[0]->time->diffInMinutes($this->ended_at)) {
+            if ($betDiff === $winners[0]->time->diffInMinutes($this->ended_at)) {
                 $winners[] = $bet;
                 continue;
             }
