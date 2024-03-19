@@ -44,7 +44,7 @@ class Sm extends Model {
 
         $timeInMin = $bet->time;
 
-        if ($timeInMin <= upper || $timeInMin >= lower) return true;
+        if ($timeInMin <= upper && $timeInMin >= lower) return true;
         else return false;
     }
 
