@@ -39,12 +39,12 @@ class Sm extends Model {
      *
      */
     private function isWinner($bet) {
-        $lower = $this->ended_at - 8;
-        $upper = $this->ended_at + 8;
+        $lower = $this->ended_at->timestamp - 8 * 60;
+        $upper = $this->ended_at->timestamp + 8 * 60;
 
-        $timeInMin = $bet->time;
+        $time = $bet->time->timestamp;
 
-        if ($timeInMin <= upper || $timeInMin >= lower) return true;
+        if ($lower <= $time && $time <= $upper) return true;
         else return false;
     }
 
@@ -53,7 +53,7 @@ class Sm extends Model {
 
         // Add every bet within winning interval
         foreach ($this->bets as $bet) {
-            if (isWinner($bet)) $winners[] = $bet;
+            if ($this->isWinner($bet)) $winners[] = $bet;
         }
 
         if (count($winners) !== 0) return $winners;
