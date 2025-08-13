@@ -29,4 +29,4 @@ RUN ln -s _vendor vendor && chown -R www:www /app
 EXPOSE 8000
 
 USER root
-ENTRYPOINT ["sh", "-c", "php artisan migrate && php artisan serve --host=0.0.0.0 --port=$PORT"]
+ENTRYPOINT ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT"]
