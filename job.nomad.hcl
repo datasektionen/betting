@@ -34,8 +34,8 @@ DB_PASSWORD={{ .db_password }}
 LOGIN_API_KEY={{ .login_key }}
 {{ end }}
 PORT={{ env "NOMAD_PORT_http" }}
-APP_DEBUG=false
-APP_ENV=production
+APP_DEBUG=true
+APP_ENV=development
 APP_LOG_LEVEL=debug
 DB_CONNECTION=pgsql
 DB_DRIVER=pgsql
