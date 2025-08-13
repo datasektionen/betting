@@ -1,5 +1,7 @@
 # Betting
 
+> **WARNING**: Migrations not currently running in deployment
+
 System to bet when SM ends. I heard there are great rewards for those who win.
 
 ## Running
