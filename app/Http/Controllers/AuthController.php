@@ -41,9 +41,7 @@ class AuthController {
 	}
 
 	/**
-	* When login is complete, login2 will redirect us here. Now verify the login and ask PLS
-	* for admin privileges. The admin privileges will be stored in Session['admin'] as an array of
-	* pls permissions.
+	* When login is complete, login2 will redirect us here. Now verify the login.
 	* 
 	* @param  string $token the token from login2
 	* @return redirect to main page or intended page
