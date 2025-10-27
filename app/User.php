@@ -34,22 +34,12 @@ class User extends Authenticatable {
         return User::where('kth_username', '=', $kthUsername)->first();
     }
 
-    /**
-     * Finds user by KTH username.
-     * 
-     * @param  string $kthUsername the kth username
-     * @return User or null
-     */
-    public static function findByUgKthId($ugKthId) {
-        return User::where('ugkthid', '=', $ugKthId)->first();
-    }
-
-    public static function createIfNotExistsOrFail($ugKthId) {
-        $user = User::findByUgKthId($ugKthId);
+    public static function createIfNotExistsOrFail($kthUsername) {
+        $user = User::findByKTHUsername($kthUsername);
         if ($user === null) {
             $client = new Client();
             try {
-                $res = $client->request('GET', env('HODIS_API_URL') . '/ugkthid/' . $ugKthId);
+                $res = $client->request('GET', env('SSO_API_URL') . '/api/users?format=single&u=' . $kthUsername);
             } catch(Exception $e){
                 abort(404);
             }
@@ -59,10 +49,9 @@ class User extends Authenticatable {
             $data = json_decode($res->getBody());
 
             $user = new User;
-            $user->ugkthid = $ugKthId;
-            $user->kth_username = $data->uid;
-            $user->email = $data->uid . "@kth.se";
-            $user->name = $data->cn;
+            $user->kth_username = $kthUsername;
+            $user->email = $data->email;
+            $user->name = $data->firstName . ' ' . $data->familyName;
         }
         $user->save();
         return $user;

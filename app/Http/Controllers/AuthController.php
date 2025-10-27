@@ -59,7 +59,7 @@ class AuthController {
 		// We now have a response. If it is good, parse the json and login user
 		if ($res->getStatusCode() == 200) {
 			$body = json_decode($res->getBody());
-			$user = User::createIfNotExistsOrFail($body->ugkthid, $body);
+			$user = User::createIfNotExistsOrFail($body->user, $body);
 
 			Auth::login($user);
 		} else {
