@@ -7,7 +7,7 @@ System to bet when SM ends. I heard there are great rewards for those who win.
 ## Running
 `docker compose watch`
 
-Open http://localhost:8000/ in your browser.
+Open http://localhost:8080/ in your browser.
 
 Or if you hate docker, you can continue reading this document.
 
