@@ -43,7 +43,7 @@ DB_DATABASE=betting
 DB_HOST=postgres.dsekt.internal
 DB_PORT=5432
 DB_USERNAME=betting
-HODIS_API_URL="https://hodis.datasektionen.se"
+SSO_API_URL="http://sso.nomad.dsekt.internal"
 LOGIN_API_URL="https://login.datasektionen.se"
 LOGIN_FRONTEND_URL="https://login.datasektionen.se"
 ENV
