@@ -17,7 +17,7 @@ use App\Sm;
 
 Route::get('/logout', 'AuthController@getLogout')->middleware('auth');
 Route::get('/login', 'AuthController@getLogin');
-Route::get('/login-complete/{token}', 'AuthController@getLoginComplete');
+Route::get('/login-complete', 'AuthController@getLoginComplete');
 
 Route::get('/sm/end', function () {
 	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();

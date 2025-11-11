@@ -8,17 +8,22 @@ services:
       - APP_KEY=12345678901234567890abcdefabcdea
       - APP_DEBUG=true
       - APP_LOG_LEVEL=debug
-      - APP_URL=http://localhost:8000/
+      - APP_URL=http://localhost:8080/
       - DB_CONNECTION=pgsql
       - DB_DRIVER=pgsql
       - DB_HOST=db
       - DB_DATABASE=postgres
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
-      - LOGIN_API_URL=http://nyckeln:7002
-      - LOGIN_FRONTEND_URL=http://localhost:7002
       - SSO_API_URL=http://nyckeln:7003
+      - OIDC_PROVIDER=http://nyckeln:7003
+      - OIDC_ID=client-id
+      - OIDC_SECRET=client-secret
+      - REDIRECT_URL=http://localhost:8080/login-complete
       - PORT=8080
+    configs:
+      - source: http_proxy.nginx.conf
+        target: /etc/nginx/http.d/http_proxy.conf
     depends_on:
       db:
         condition: service_healthy
@@ -55,22 +60,23 @@ services:
       - 7004:7004
 
 configs:
-  nginx.conf:
+  http_proxy.nginx.conf:
     content: |
-      events {}
+      server {
+        listen 7003;
 
-      http {
-        server {
-          listen 7003;
-
-          location / {
-            proxy_pass http://nyckeln:7003;
-          }
+        location / {
+          proxy_pass http://nyckeln:7003;
         }
       }
 
   nyckeln.yaml:
     content: |
+      clients:
+        - id: client-id
+          secret: client-secret
+          redirect_uris:
+            - http://localhost:8080/login-complete
       users:
         - ug_kth_id: some-id
           kth_id: turetek

@@ -6,11 +6,12 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
+        "ext-mbstring": "*",
         "guzzlehttp/guzzle": "^6.3",
+        "jumbojett/openid-connect-php": "^1.0",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
-        "netcarver/textile": "3.6.*",
-	    "ext-mbstring": "*"
+        "netcarver/textile": "3.6.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -55,7 +56,10 @@
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
     },
     "extra": {
         "heroku": {
