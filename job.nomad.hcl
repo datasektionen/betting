@@ -30,8 +30,7 @@ job "betting" {
 {{ with nomadVar "nomad/jobs/betting" }}
 APP_KEY={{ .app_secret_key }}
 DATABASE_URL="postgres://betting:{{ .db_password }}@postgres.dsekt.internal:5432/betting"
-DB_PASSWORD={{ .db_password }}
-LOGIN_API_KEY={{ .login_key }}
+OIDC_SECRET={{ .oidc_secret }}
 {{ end }}
 PORT={{ env "NOMAD_PORT_http" }}
 APP_DEBUG=false
@@ -44,8 +43,9 @@ DB_HOST=postgres.dsekt.internal
 DB_PORT=5432
 DB_USERNAME=betting
 SSO_API_URL="http://sso.nomad.dsekt.internal"
-LOGIN_API_URL="https://login.datasektionen.se"
-LOGIN_FRONTEND_URL="https://login.datasektionen.se"
+OIDC_PROVIDER=http://sso.nomad.dsekt.internal/op
+OIDC_ID=betting
+REDIRECT_URL=https://betting.datasektionen.se/login-complete
 ENV
         destination = "local/.env"
         env         = true
