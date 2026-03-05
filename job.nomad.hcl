@@ -32,6 +32,7 @@ APP_KEY={{ .app_secret_key }}
 DATABASE_URL="postgres://betting:{{ .db_password }}@postgres.dsekt.internal:5432/betting"
 DB_PASSWORD={{ .db_password }}
 OIDC_SECRET={{ .oidc_secret }}
+RFINGER_API_KEY={{ .rfinger_api_key }}
 {{ end }}
 PORT={{ env "NOMAD_PORT_http" }}
 APP_DEBUG=false
@@ -47,6 +48,7 @@ SSO_API_URL="http://sso.nomad.dsekt.internal"
 OIDC_PROVIDER=http://sso.nomad.dsekt.internal/op
 OIDC_ID=betting
 REDIRECT_URL=https://betting.datasektionen.se/login-complete
+RFINGER_API_URL=https://rfinger.datasektionen.se/api
 ENV
         destination = "local/.env"
         env         = true

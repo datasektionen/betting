@@ -10,8 +10,21 @@
     </div>
 </header>
 <div id="content">
-	@foreach ($sm->winningBets() as $wb) 
-	<div class="crop" style="margin: 0 auto;float:none;position:static;display:block;width: 100px; height: 100px; background-image: url('https://zfinger.datasektionen.se/user/{{ $wb->user->kth_username }}/image')"></div>
+	@foreach ($sm->winningBets() as $wb)
+
+    @php
+    $username = $wb->user->kth_username;
+    $opts = [
+        'http' => [
+            'method' => "GET",
+            'header' => "Authorization: Bearer " . env('RFINGER_API_KEY')
+        ]
+    ];
+    $context = stream_context_create($opts);
+    $link =  file_get_contents(env('RFINGER_API_URL') . '/' . $username, false, $context);
+    @endphp
+
+	<div class="crop" style="margin: 0 auto;float:none;position:static;display:block;width: 100px; height: 100px; background-image: url({{ $link }})"></div>
     <h1 style="text-align: center">{{ $wb->user->name }} vann med bettet {{ $wb->time->format('H:i') }}.</h1>
     @endforeach
     <h2>Alla gissningar</h2>
