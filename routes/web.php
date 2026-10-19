@@ -66,6 +66,9 @@ Route::post('/', function (Request $request) {
 	if (empty($request->input('hours')) || empty($request->input('minutes'))) {
 		return redirect('/')->with('error', 'Fyll i tiden!');
 	}
+	if (empty($request->input('day'))) {
+		return redirect('/')->with('error', 'Fyll i dagen!');
+	}
 	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();
 	if (Auth::user()->hasBetted($sm)) {
 		return redirect('/')->with('error', 'Du kan ju inte betta när du redan har bettat!');
@@ -74,7 +77,8 @@ Route::post('/', function (Request $request) {
 		return redirect('/')->with('error', 'Tyvärr är du för sent ute för att få vara med i leken');
 	}
 	$bet = App\Bet::create([
-		'user_id' => Auth::user()->id, 
+		'user_id' => Auth::user()->id,
+		'day' => intval($request->input('day')),
 		'time' => Carbon::create(
 			date('Y'),
 			date('m'),

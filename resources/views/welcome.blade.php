@@ -21,6 +21,10 @@
         <div class="form">
             <h4>Din gissning, {{ Auth::user()->name }}:</h4>
             <div class="input">
+                <h2 for="day">Dag</h2>
+                <input type="text" class="time" name="day" value="{{ $bet->day }}" disabled="disabled" />
+                <br/>
+                <h2 for="hours">Klockslag</h2>
                 <input type="text" class="time" name="hours" value="{{ $bet->time->hour < 10 ? '0' : '' }}{{ $bet->time->hour }}" disabled="disabled" />
                 <span class="colon">:</span>
                 <input type="text" class="time" name="minutes" value="{{ $bet->time->minute < 10 ? '0' : '' }}{{ $bet->time->minute }}" disabled="disabled" />
@@ -31,6 +35,10 @@
             {{ csrf_field() }}
             <div class="form">
                 <div class="input">
+                    <h1 for="day">Dag</h1>
+                    <input type="number" min="1" max="5" class="time" name="day" placeholder="" />
+                    <br/>
+                    <h1 for="hours">Klockslag</h1>
                     <input type="number" min="0" max="23" class="time" name="hours" placeholder="" />
                     <span class="colon">:</span>
                     <input type="number" min="0" max="59" class="time" name="minutes" placeholder="" />
