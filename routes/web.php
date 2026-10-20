@@ -92,8 +92,7 @@ Route::post('/', function (Request $request) {
 		'time' => Carbon::create(
 			date('Y'),
 			date('m'),
-			date('d'), // Testar, ta bort om kvar vid PR!!!
-			//(intval($request->input('hours')) < 17 ? date('d', strtotime('+1 day')) : date('d')),
+			(intval($request->input('hours')) < 17 ? date('d', strtotime('+1 day')) : date('d')),
 			intval($request->input('hours')), 
 			intval($request->input('minutes')),
 			0,
