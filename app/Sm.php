@@ -15,6 +15,7 @@ class Sm extends Model {
      * @var array
      */
     protected $fillable = [
+        'day',
         'name'
     ];
     protected $dates = [
@@ -39,6 +40,7 @@ class Sm extends Model {
      *
      */
     private function isWinner($bet) {
+        if ($bet->day !== $this->day) return false;
         $lower = $this->ended_at->timestamp - 5 * 60;
         $upper = $this->ended_at->timestamp + 5 * 60;
 
@@ -55,7 +57,12 @@ class Sm extends Model {
         foreach ($this->bets as $bet) {
             if ($this->isWinner($bet)) $winners[] = $bet;
         }
-
+        // if (count($winners) == 0) {
+        //     // Sort by time
+        //     $winners = $this->bets->sortBy(function ($bet) {
+        //         return abs($bet->time->timestamp - $this->ended_at->timestamp);
+        //     })->take(1);
+        // }
         return $winners;
     }
 }

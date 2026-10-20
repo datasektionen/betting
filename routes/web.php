@@ -19,9 +19,10 @@ Route::get('/logout', 'AuthController@getLogout')->middleware('auth');
 Route::get('/login', 'AuthController@getLogin');
 Route::get('/login-complete', 'AuthController@getLoginComplete');
 
-Route::get('/sm/end', function () {
+Route::get('/sm/end/{day}', function ($day) {
 	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();
 	$sm->ended_at = Carbon::now('Europe/Stockholm');
+	$sm->day = $day;
 	$sm->save();
     return redirect('/');
 });

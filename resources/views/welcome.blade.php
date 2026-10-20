@@ -69,7 +69,7 @@
                 {{ $bet->user->name }}
             </td>
             <td>
-                {{ $bet->time->format('H:i') }}
+                &emsp; kl. {{ $bet->time->format('H:i') }} &emsp; Dag {{ $bet->day }}
             </td>
         </tr>
         @empty
