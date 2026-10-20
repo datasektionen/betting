@@ -64,7 +64,7 @@
             </tr>
         </thead>
         @forelse ($bets as $bet) 
-        <tr{!! $bet->time->lt(Carbon\Carbon::now()) ? ' style="opacity: 0.5; background: #fff"' : '' !!}>
+        <tr{!! $bet->day < $sm->day || ($bet->day == $sm->day && $bet->time->lt(Carbon\Carbon::now())) ? ' style="opacity: 0.5; background: #fff"' : '' !!}>
             <td>
                 {{ $bet->user->name }}
             </td>

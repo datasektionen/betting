@@ -19,16 +19,25 @@ Route::get('/logout', 'AuthController@getLogout')->middleware('auth');
 Route::get('/login', 'AuthController@getLogin');
 Route::get('/login-complete', 'AuthController@getLoginComplete');
 
-Route::get('/sm/end/{day}', function ($day) {
+Route::get('/sm/end/', function () {
 	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();
 	$sm->ended_at = Carbon::now('Europe/Stockholm');
+	$sm->save();
+    return redirect('/');
+});
+
+// Update the day of the current SM, default is 1 when created.
+// This is used to keep track of the current day in the SM.
+// Update to next day when the current day is over.
+Route::get('/sm/day/{day}', function ($day) {
+	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();
 	$sm->day = $day;
 	$sm->save();
     return redirect('/');
 });
 
 Route::get('/sm/create/{name}', function ($name) {
-	$sm = Sm::create(['name' => $name]);
+	$sm = Sm::create(['name' => $name, 'day' => 1]);
     return redirect('/');
 });
 
@@ -83,7 +92,8 @@ Route::post('/', function (Request $request) {
 		'time' => Carbon::create(
 			date('Y'),
 			date('m'),
-			(intval($request->input('hours')) < 17 ? date('d', strtotime('+1 day')) : date('d')),
+			date('d'), // Testar, ta bort om kvar vid PR!!!
+			//(intval($request->input('hours')) < 17 ? date('d', strtotime('+1 day')) : date('d')),
 			intval($request->input('hours')), 
 			intval($request->input('minutes')),
 			0,

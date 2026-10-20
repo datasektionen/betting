@@ -4,7 +4,7 @@
 <header>
     <div class="header-inner">
         <div class="row">
-            <h2>{{ $sm->name }} slutade dag {{ $sm->day }} kl. {{ $sm->ended_at->format('H:i') }}</h2>
+            <h2>{{ $sm->name }} slutade dag&nbsp;{{ $sm->day }} kl.&nbsp;{{ $sm->ended_at->format('H:i') }}</h2>
         </div>
         <div class="clear"></div>
     </div>
@@ -33,15 +33,11 @@
             </div>
 
             <h1 style="text-align: center">
-                {{ $wb->user->name }} vann med bettet kl. {{ $wb->time->format('H:i') }} dag {{ $wb->day }}.
+                {{ $wb->user->name }} vann med bettet kl.&nbsp;{{ $wb->time->format('H:i') }} dag&nbsp;{{ $wb->day }}.
             </h1>
         @endforeach
     @else
-        <h1 style="text-align: center">Ingen vann.</h1>
-        <h3 style="text-align: center">antal rätt gissningar: {{ count($sm->winningBets()) }}</h3>
-        @php
-            dd($sm->day, $sm->ended_at, $sm->winningBets());
-        @endphp
+        <h1 style="text-align: center">Ingen vann bettingen!</h1>
         <img src="{{ asset('images/pictures/image.png') }}"
              style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
     @endif
@@ -55,12 +51,12 @@
             </tr>
         </thead>
         @foreach ($bets as $bet) 
-        <tr{!! $bet->time->lt(Carbon\Carbon::now()) ? ' style="opacity: 0.5; background: #fff"' : '' !!}>
+        <tr{!! $bet->day < $sm->day || ($bet->day == $sm->day && $bet->time->lt(Carbon\Carbon::now()->subMinutes(5))) ? ' style="opacity: 0.5; background: #fff"' : '' !!}>
             <td>
                 {{ $bet->user->name }}
             </td>
             <td>
-                &emsp; kl. {{ $bet->time->format('H:i') }} &emsp; Dag {{ $bet->day }}
+                &emsp; kl.&nbsp;{{ $bet->time->format('H:i') }} &emsp; Dag&nbsp;{{ $bet->day }}
             </td>
         </tr>
         @endforeach

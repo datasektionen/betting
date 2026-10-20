@@ -28,7 +28,9 @@ class Sm extends Model {
     }
 
     public function bets() {
-        return $this->hasMany('App\Bet');
+        return $this->hasMany('App\Bet')
+            ->orderBy('day', 'asc')
+            ->orderBy('time', 'asc');
     }
 
     public function isLive() {
@@ -57,12 +59,6 @@ class Sm extends Model {
         foreach ($this->bets as $bet) {
             if ($this->isWinner($bet)) $winners[] = $bet;
         }
-        // if (count($winners) == 0) {
-        //     // Sort by time
-        //     $winners = $this->bets->sortBy(function ($bet) {
-        //         return abs($bet->time->timestamp - $this->ended_at->timestamp);
-        //     })->take(1);
-        // }
         return $winners;
     }
 }
