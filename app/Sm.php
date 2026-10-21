@@ -15,6 +15,7 @@ class Sm extends Model {
      * @var array
      */
     protected $fillable = [
+        'day',
         'name'
     ];
     protected $dates = [
@@ -27,7 +28,9 @@ class Sm extends Model {
     }
 
     public function bets() {
-        return $this->hasMany('App\Bet');
+        return $this->hasMany('App\Bet')
+            ->orderBy('day', 'asc')
+            ->orderBy('time', 'asc');
     }
 
     public function isLive() {
@@ -39,8 +42,9 @@ class Sm extends Model {
      *
      */
     private function isWinner($bet) {
-        $lower = $this->ended_at->timestamp - 8 * 60;
-        $upper = $this->ended_at->timestamp + 8 * 60;
+        if ($bet->day !== $this->day) return false;
+        $lower = $this->ended_at->timestamp - 5 * 60;
+        $upper = $this->ended_at->timestamp + 5 * 60;
 
         $time = $bet->time->timestamp;
 
@@ -54,26 +58,6 @@ class Sm extends Model {
         // Add every bet within winning interval
         foreach ($this->bets as $bet) {
             if ($this->isWinner($bet)) $winners[] = $bet;
-        }
-
-        if (count($winners) !== 0) return $winners;
-
-        // Fallback: no winner within 15 minutes means look for closest time
-        foreach ($this->bets as $bet) {
-            $betDiff = $bet->time->diffInMinutes($this->ended_at);
-
-            if (count($winners) === 0) {
-                $winners = [$bet];
-                continue;
-            }
-            if ($betDiff < $winners[0]->time->diffInMinutes($this->ended_at)) {
-                $winners = [$bet];
-                continue;
-            }
-            if ($betDiff === $winners[0]->time->diffInMinutes($this->ended_at)) {
-                $winners[] = $bet;
-                continue;
-            }
         }
         return $winners;
     }

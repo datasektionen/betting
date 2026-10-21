@@ -19,15 +19,25 @@ Route::get('/logout', 'AuthController@getLogout')->middleware('auth');
 Route::get('/login', 'AuthController@getLogin');
 Route::get('/login-complete', 'AuthController@getLoginComplete');
 
-Route::get('/sm/end', function () {
+Route::get('/sm/end/', function () {
 	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();
 	$sm->ended_at = Carbon::now('Europe/Stockholm');
 	$sm->save();
     return redirect('/');
 });
 
+// Update the day of the current SM, default is 1 when created.
+// This is used to keep track of the current day in the SM.
+// Update to next day when the current day is over.
+Route::get('/sm/day/{day}', function ($day) {
+	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();
+	$sm->day = $day;
+	$sm->save();
+    return redirect('/');
+});
+
 Route::get('/sm/create/{name}', function ($name) {
-	$sm = Sm::create(['name' => $name]);
+	$sm = Sm::create(['name' => $name, 'day' => 1]);
     return redirect('/');
 });
 
@@ -66,6 +76,9 @@ Route::post('/', function (Request $request) {
 	if (empty($request->input('hours')) || empty($request->input('minutes'))) {
 		return redirect('/')->with('error', 'Fyll i tiden!');
 	}
+	if (empty($request->input('day'))) {
+		return redirect('/')->with('error', 'Fyll i dagen!');
+	}
 	$sm = Sm::select('*')->orderBy('id', 'DESC')->first();
 	if (Auth::user()->hasBetted($sm)) {
 		return redirect('/')->with('error', 'Du kan ju inte betta när du redan har bettat!');
@@ -74,7 +87,8 @@ Route::post('/', function (Request $request) {
 		return redirect('/')->with('error', 'Tyvärr är du för sent ute för att få vara med i leken');
 	}
 	$bet = App\Bet::create([
-		'user_id' => Auth::user()->id, 
+		'user_id' => Auth::user()->id,
+		'day' => intval($request->input('day')),
 		'time' => Carbon::create(
 			date('Y'),
 			date('m'),
