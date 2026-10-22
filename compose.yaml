@@ -2,19 +2,21 @@ services:
   app:
     build: .
     ports: [ 8080:8080 ]
-    init: true
     environment:
-      - APP_ENV=production
+      - LOG_CHANNEL=stderr
+      - LOG_LEVEL=debug
+      - APP_ENV=debug
       - APP_KEY=12345678901234567890abcdefabcdea
       - APP_DEBUG=true
       - APP_LOG_LEVEL=debug
-      - APP_URL=http://localhost:8080/
+      - APP_URL=http://localhost:8080
+      - SESSION_DRIVER=cookie
       - DB_CONNECTION=pgsql
       - DB_DRIVER=pgsql
       - DB_HOST=db
-      - DB_DATABASE=postgres
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=postgres
+      - DB_DATABASE=betting
+      - DB_USERNAME=betting
+      - DB_PASSWORD=betting
       - SSO_API_URL=http://nyckeln:7003
       - OIDC_PROVIDER=http://nyckeln:7003
       - OIDC_ID=client-id
@@ -24,7 +26,7 @@ services:
       - RFINGER_API_URL=http://dock:9003/api
       - PORT=8080
     configs:
-      - source: http_proxy.nginx.conf
+      - source: nginx.conf
         target: /etc/nginx/http.d/http_proxy.conf
     depends_on:
       db:
@@ -38,15 +40,17 @@ services:
         - action: rebuild
           path: composer.json
   db:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
+    ports:
+      - 5432:5432
     environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=betting
+      - POSTGRES_USER=betting
+      - POSTGRES_DB=betting
     healthcheck:
       test:
         - "CMD-SHELL"
-        - "sh -c 'pg_isready -d postgres -U postgres'"
+        - "sh -c 'pg_isready -d betting -U betting'"
       interval: 1s
       timeout: 5s
       retries: 5
@@ -86,15 +90,33 @@ configs:
           karklu:
             regular: https://dsekt-assets.s3.amazonaws.com/website/namnder/dkm.svg
             small: https://dsekt-assets.s3.amazonaws.com/website/namnder/dkm.svg
-  http_proxy.nginx.conf:
-    content: |
-      server {
-        listen 7003;
 
-        location / {
-          proxy_pass http://nyckeln:7003;
+  nginx.conf:
+    content: |
+        server {
+            listen 8080;
+            root /var/www/html/public;
+            index index.php;
+
+            location / {
+                try_files $$uri $$uri/ /index.php?$$query_string;
+            }
+
+            location ~ \.php$$ {
+                fastcgi_pass 127.0.0.1:9000;
+                fastcgi_index index.php;
+                fastcgi_param SCRIPT_FILENAME $$document_root$$fastcgi_script_name;
+                include fastcgi_params;
+            }
         }
-      }
+
+        server {
+            listen 7003;
+
+            location / {
+                proxy_pass http://nyckeln:7003;
+            }
+        }
 
   nyckeln.yaml:
     content: |
