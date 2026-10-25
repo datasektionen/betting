@@ -1,13 +1,14 @@
-<?php namespace App\Http\Controllers;
+<?php
 
+namespace App\Http\Controllers;
+
+use App\Models\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
 
-use App\User;
-use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Jumbojett\OpenIDConnectClient;
@@ -34,10 +35,10 @@ class AuthController {
 
 	/**
 	* The logout url. Redirects to main page with success message.
-	* 
+	*
 	* @return view the welcome view
 	*/
-	public function getLogout() {
+	public function getLogout(): RedirectResponse {
 		Auth::logout();
 		Session::forget('admin');
 		return redirect('/')
@@ -46,19 +47,19 @@ class AuthController {
 
 	/**
 	* The login page. Just redirects to sso.
-	* 
+	*
 	* @return redirect to sso.datasektionen.se
 	*/
-	public function getLogin(Request $request) {
+	public function getLogin(Request $request): bool {
 		return $this->oidc->authenticate();
 	}
 
 	/**
 	* When login is complete, sso will redirect us here. Now verify the login.
-	* 
+	*
 	* @return redirect to main page or intended page
 	*/
-	public function getLoginComplete() {
+	public function getLoginComplete(): RedirectResponse {
 		if ($this->oidc->authenticate() === FALSE) {
 			return redirect('/')->with('error', 'Du loggades inte in.');
 		}
