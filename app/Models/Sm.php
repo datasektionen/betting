@@ -43,7 +43,8 @@ class Sm extends Model {
 
     public static function active(): Sm {
         return Sm::latest('id')->first() ?? Sm::create([
-            'name' => 'Budget-SM'
+            'name' => 'Budget-SM',
+            'day' => 1
         ]);
     }
 
