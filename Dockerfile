@@ -17,6 +17,7 @@ RUN apk add --no-cache \
     freetype-dev \
     libjpeg-turbo-dev \
     postgresql-dev \
+    postgresql-client \
     linux-headers \
     bash \
     nginx \
