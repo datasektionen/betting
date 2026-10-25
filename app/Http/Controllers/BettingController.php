@@ -66,31 +66,61 @@ class BettingController extends Controller
     }
 
     public function end(): RedirectResponse {
+        if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
+		}
         $sm = Sm::active();
         $sm->ended_at = Carbon::now('Europe/Stockholm');
         $sm->save();
-        return redirect('/');
+        return redirect('admin')->with('success', 'Betting är stängd!');
     }
 
     // Update the day of the current SM, default is 1 when created.
     // This is used to keep track of the current day in the SM.
     // Update to next day when the current day is over.
     public function day(int $day): RedirectResponse {
+        if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
+		}
         $sm = Sm::active();
         $sm->day = $day;
         $sm->save();
-        return redirect('/');
+        return redirect('admin')->with('success', 'Uppdaterade dag till: ' . $day);
     }
 
-    public function create(string $name): RedirectResponse {
-        $sm = Sm::create(['name' => $name, 'day' => 1]);
-        return redirect('/');
+    public function create(Request $request): RedirectResponse {
+        if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
+		}
+        $sm = Sm::create(['name' => $request->input('name'), 'day' => 1]);
+        return redirect('admin')->with('success', 'Skapade SM med namn: ' . $request->input('name'));
     }
 
     public function live(): RedirectResponse {
+		if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
+		}
         $sm = Sm::active();
         $sm->live_at = \Carbon\Carbon::now();
         $sm->save();
-        return redirect('/');
+        return redirect('admin')->with('success', 'SM är nu live! Inga mer bets!!!');
     }
+
+    public function skurk(): RedirectResponse {
+        return redirect('/')->with('error', 'Du kan inte göra det här som GET, skurk!');
+    }
+
+	public function getAdmin(): RedirectResponse|\Illuminate\Contracts\View\View {
+		if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
+		}
+
+		// TODO: Uncomment this when we have a proper admin system in place. For now, everyone can access the admin page.
+		// if (!Auth::user()->isAdmin()) {
+		// 	return view('welcome')->with('error', 'Du har inte behörighet att komma åt adminsidan.');
+		// }
+
+		return view('admin')
+            ->with('sm', Sm::active());
+	}
 }

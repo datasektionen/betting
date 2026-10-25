@@ -35,8 +35,12 @@ services:
       watch:
         - action: sync
           path: .
-          target: /app
-          ignore: [vendor/]
+          target: /var/www/html
+          ignore:
+            - vendor/
+            - .git/
+            - .env
+            - composer.json
         - action: rebuild
           path: composer.json
   db:

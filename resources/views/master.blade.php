@@ -52,7 +52,10 @@
             login_href: "/logout",
             @endif
             links: [
-                { str: "Hem", href: "/" }
+                { str: "Hem", href: "/" },
+                @if(Auth::check())// && Auth::user()->isAdmin()) <-- add when isAdmin() is fixed
+                    { str: "Admin", href: "/admin" }
+                @endif
             ]
         }
     </script>
