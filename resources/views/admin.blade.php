@@ -20,7 +20,7 @@
     @else
         <p>Just nu är SM inte live, och det senaste SM som kördes var {{ $sm->name }}.</p>
     @endif
-    @if ($sm->isLive() && $sm->ended_at === null) // LN
+    @if ($sm->isLive() && $sm->ended_at === null)
         <form action="/sm/day/{{$sm->day + 1}}" method="POST">
             @csrf
             <button type="submit" class="button theme-color">Nästa dag</button>
@@ -31,15 +31,15 @@
             <button type="submit" class="button theme-color">Stäng Betting</button>
         </form>
     @endif
-    @if (!$sm->isLive()) // nL
+    @if (!$sm->isLive())
         <form action="/sm/live" method="POST">
             @csrf
             <button type="submit" class="button theme-color">Live</button>
         </form>
     @endif
-    @if ($sm->isLive() && $sm->ended_at === null) //LN
+    @if ($sm->isLive() && $sm->ended_at === null)
     @endif
-    @if ($sm->isLive() && $sm->ended_at !== null) //LnN
+    @if ($sm->isLive() && $sm->ended_at !== null)
         <form action="/sm/create/" method="POST">
             @csrf
             <label for="SM-name">Namn på SM/VM:</label><br>
