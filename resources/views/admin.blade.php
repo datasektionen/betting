@@ -1,7 +1,8 @@
 @extends('master')
 
+@section('title', 'Bettings Adminsida')
+
 @section('main')
-<title>Bettings Adminsida</title>
 <header>
     <div class="header-inner">
         <div class="row">
@@ -11,7 +12,7 @@
     </div>
 </header>
 <div id="content">
-    <div id="flash-messages" style="min-height: 25px;">
+    <div id="flash-messages" style="height: 25px;">
         {{ !empty($error) ? $error : '' }}
         {{ !empty(session('error')) ? session('error') : '' }}
         {{ !empty($success) ? $success : '' }}
@@ -75,6 +76,7 @@
         if (messages) {
             messages.style.transition = 'opacity 0.5s ease';
             messages.style.opacity = '0';
+            setTimeout(() => {messages.replaceChildren();}, 500);
         }
     }, 5000);
 </script>
