@@ -1,51 +1,81 @@
 @extends('master')
 
 @section('main')
+<title>Bettings Adminsida</title>
 <header>
     <div class="header-inner">
         <div class="row">
-            <h2>Välkommen till Adminsidan, ärade Vice Talman</h2>
+            <h2>Välkommen&nbsp;till&nbsp;Adminsidan, ärade&nbsp;Vice&nbsp;Talman</h2>
         </div>
         <div class="clear"></div>
     </div>
 </header>
 <div id="content">
-    {{ !empty($error) ? $error : '' }}
-    {{ !empty(session('error')) ? session('error') : '' }}
-    {{ !empty($success) ? $success : '' }}
-    {{ !empty(session('success')) ? session('success') : '' }}
-    <h1>Detta är adminsidan, här kan du göra saker som bara admins kan göra.</h1>
-    @if ($sm->ended_at === null)
-        <p>Just nu är det dag {{ $sm->day }} av SM, och SM är {{ $sm->isLive() ? 'live' : 'inte live' }}.</p>
-    @else
-        <p>Just nu är SM inte live, och det senaste SM som kördes var {{ $sm->name }}.</p>
-    @endif
-    @if ($sm->isLive() && $sm->ended_at === null)
-        <form action="/sm/day/{{$sm->day + 1}}" method="POST">
+    <div id="flash-messages" style="min-height: 25px;">
+        {{ !empty($error) ? $error : '' }}
+        {{ !empty(session('error')) ? session('error') : '' }}
+        {{ !empty($success) ? $success : '' }}
+        {{ !empty(session('success')) ? session('success') : '' }}
+    </div>
+    <!--<h1>Detta är adminsidan, här kan du göra saker som bara admins kan göra.</h1>-->
+    <div style="display: flex; justify-content: center; align-items: flex-end; gap: 10px;">
+        <form action="/sm/create/" method="POST" style="display: flex; flex-direction: column; gap: 10px;"> <!-- (!$sm->isLive() && $sm->ended_at !== null) -->
             @csrf
-            <button type="submit" class="button theme-color">Nästa dag</button>
+            <label for="SM-name" style="margin: -5px 0;">Namn&nbsp;på SM/VM:</label>
+            @if ($sm->ended_at === null)
+                <input type="text" id="SM-name" name="name" placeholder="{{ $sm->name }}" required style="width: 100%; box-sizing: border-box;" disabled>
+            @else
+                <input type="text" id="SM-name" name="name" placeholder="Budget-VM" required style="width: 100%; box-sizing: border-box;">
+            @endif
+            <button type="submit" class="button theme-color" style="width: 100%; box-sizing: border-box;" @disabled($sm->ended_at === null)>
+                Öppna&nbsp;Betting
+            </button>
         </form>
-        <br>
+        <form action="/sm/live" method="POST" style="display: flex; flex-direction: column; gap: 10px;"> <!-- (!$sm->isLive()) -->
+            @csrf
+            @if (!$sm->isLive())
+                <b style="text-align: center; color: green">Det&nbsp;går att&nbsp;betta!</b>
+            @elseif ($sm->ended_at === null)
+                <b style="text-align: center; color: red">Inga&nbsp;mera&nbsp;bets!</b>
+            @endif
+            <button type="submit" class="button theme-color" @disabled($sm->isLive())>
+                Sluta&nbsp;ta emot&nbsp;bets
+            </button>
+        </form>
+        <div style="position: relative; display: flex; align-items: flex-end;">
+            <form action="/sm/day/{{$sm->day + 1}}" method="POST" style="display: flex; flex-direction: column; gap: 10px;"> <!-- ($sm->isLive() && $sm->ended_at === null) -->
+                @csrf
+                @if ($sm->isLive() && $sm->ended_at === null)
+                    <b style="text-align: center">Dag {{ $sm->day }}</b>
+                @endif
+                <button type="submit" class="button theme-color" @disabled(!$sm->isLive() || $sm->ended_at !== null)>
+                    Nästa&nbsp;dag
+                </button>
+            </form>
+            @if ($sm->ended_at === null && $sm->day > 1)
+                <form action="/sm/day/{{$sm->day - 1}}" method="POST" style="position: absolute; top: 100%; margin-top: 10px; white-space: nowrap;"> <!-- ($sm->isLive() && $sm->ended_at === null) -->
+                    @csrf
+                    <button type="submit" class="button theme-color">
+                        Oops, gå&nbsp;tillbaka en&nbsp;dag
+                    </button>
+                </form>
+            @endif
+        </div>
         <form action="/sm/end/" method="POST">
             @csrf
-            <button type="submit" class="button theme-color">Stäng Betting</button>
+            <button type="submit" class="button theme-color" @disabled(!$sm->isLive() || $sm->ended_at !== null)>
+                Stäng Betting!
+            </button>
         </form>
-    @endif
-    @if (!$sm->isLive())
-        <form action="/sm/live" method="POST">
-            @csrf
-            <button type="submit" class="button theme-color">Live</button>
-        </form>
-    @endif
-    @if ($sm->isLive() && $sm->ended_at === null)
-    @endif
-    @if ($sm->isLive() && $sm->ended_at !== null)
-        <form action="/sm/create/" method="POST">
-            @csrf
-            <label for="SM-name">Namn på SM/VM:</label><br>
-            <input type="text" id="SM-name" name="name" placeholder="Budget-VM" required><br><br>
-            <button type="submit" class="button theme-color">Öppna Betting</button>
-        </form>
-    @endif
+    </div>
 </div>
+<script>
+    setTimeout(() => {
+        const messages = document.getElementById('flash-messages');
+        if (messages) {
+            messages.style.transition = 'opacity 0.5s ease';
+            messages.style.opacity = '0';
+        }
+    }, 5000);
+</script>
 @endsection
