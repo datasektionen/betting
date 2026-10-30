@@ -58,6 +58,10 @@ class Sm extends Model {
         return $this->live_at !== null;
     }
 
+    public function isEnded(): bool {
+        return $this->ended_at !== null;
+    }
+
     /**
      * Check whether a bet is within the winning interval
      */
