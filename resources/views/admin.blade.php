@@ -22,7 +22,7 @@
     <div style="display: flex; justify-content: center; align-items: flex-end; gap: 10px;">
         <form action="/sm/create/" method="POST" style="display: flex; flex-direction: column; gap: 10px;">
             @csrf
-            <label for="SM-name" style="margin: -5px 0;">Namn&nbsp;på SM/VM:</label>
+            <label for="SM-name" style="margin: -5px 5;">Namn&nbsp;på SM/VM:</label>
             @if (!$sm->isEnded())
                 <input type="text" id="SM-name" name="name" placeholder="{{ $sm->name }}" required style="width: 100%; box-sizing: border-box;" disabled>
             @else
@@ -46,21 +46,37 @@
         <div style="position: relative; display: flex; align-items: flex-end;">
             <form action="/sm/day/{{$sm->day + 1}}" method="POST" style="display: flex; flex-direction: column; gap: 10px;">
                 @csrf
+                @if ($sm->adjurned)
+                    <b style="text-align: center; color: red">{{ $sm->name }}<br>är adjunderat!</b>
+                @endif
                 @if ($sm->isLive() && !$sm->isEnded())
                     <b style="text-align: center">Dag {{ $sm->day }}</b>
                 @endif
                 <button type="submit" class="button theme-color" @disabled(!$sm->isLive() || $sm->isEnded())>
-                    Nästa&nbsp;dag
+                    &nbsp;&nbsp;Nästa&nbsp;dag&nbsp;&nbsp;
                 </button>
             </form>
-            @if (!$sm->isEnded() && $sm->day > 1)
-                <form action="/sm/day/{{$sm->day - 1}}" method="POST" style="position: absolute; top: 100%; margin-top: 10px; white-space: nowrap;">
+            <div style="position: absolute; top: 100%; margin-top: 10px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start;">
+                <form action="/sm/adjurn" method="POST">
                     @csrf
                     <button type="submit" class="button theme-color">
-                        Oops, gå&nbsp;tillbaka en&nbsp;dag
+                        @if ($sm->adjurned)
+                            &nbsp;&nbsp;&nbsp;&nbsp;Öppna&nbsp;&nbsp;&nbsp;
+                        @else
+                            Adjurnera
+                        @endif
                     </button>
                 </form>
-            @endif
+
+                @if (!$sm->isEnded() && $sm->day > 1)
+                    <form action="/sm/day/{{$sm->day - 1}}" method="POST">
+                        @csrf
+                        <button type="submit" class="button theme-color">
+                            Oops,&nbsp;gå&nbsp;tillbaka&nbsp;en&nbsp;dag
+                        </button>
+                    </form>
+                @endif
+            </div>
         </div>
         <form action="/sm/end/" method="POST">
             @csrf

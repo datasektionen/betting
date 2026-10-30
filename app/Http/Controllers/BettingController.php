@@ -106,6 +106,19 @@ class BettingController extends Controller
         return redirect('admin')->with('success', 'SM är nu live! Inga mer bets!!!');
     }
 
+    public function adjurn(): RedirectResponse {
+        if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
+		}
+        $sm = Sm::active();
+        $sm->adjurned = $sm->adjurned ? FALSE : TRUE;
+        $sm->save();
+        if ($sm->adjurned) {
+            return redirect('admin')->with('success', 'Betting är adjungerat');
+        }
+        return redirect('admin')->with('success', 'Betting är igång igen');
+    }
+
     public function skurk(): RedirectResponse {
         return redirect('/')->with('error', 'Du kan inte göra det här som GET, skurk!');
     }

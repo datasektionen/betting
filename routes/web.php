@@ -12,11 +12,13 @@ Route::post('/sm/end/', [BettingController::class, 'end']);  // Kanske add Admin
 Route::post('/sm/day/{day}', [BettingController::class, 'day']);
 Route::post('/sm/create', [BettingController::class, 'create']);
 Route::post('/sm/live', [BettingController::class, 'live']);
+Route::post('/sm/adjurn', [BettingController::class, 'adjurn']);
 
 Route::get('/sm/end/', [BettingController::class, 'skurk']);
 Route::get('/sm/day/{day}', [BettingController::class, 'skurk']);
 Route::get('/sm/create/{name}', [BettingController::class, 'skurk']);
 Route::get('/sm/live', [BettingController::class, 'skurk']);
+Route::get('/sm/adjurn', [BettingController::class, 'skurk']);
 
 Route::get('/', [BettingController::class, 'index']);
 Route::post('/', [BettingController::class, 'bet'])->middleware('auth');

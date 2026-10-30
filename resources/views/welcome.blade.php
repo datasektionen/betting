@@ -68,7 +68,7 @@
             $nowMinutes = $now->hour * 60 + $now->minute;
         @endphp
         @forelse ($bets as $bet) 
-        <tr{!! $bet->day < $sm->day || ($bet->day == $sm->day && $bet->time->hour * 60 + $bet->time->minute < $nowMinutes) ? ' style="opacity: 0.5; background: #fff"' : '' !!}>
+        <tr{!! $bet->day < $sm->day || !$sm->adjurned && ($bet->day == $sm->day && $bet->time->hour * 60 + $bet->time->minute < $nowMinutes) ? ' style="opacity: 0.5; background: #fff"' : '' !!}>
             <td>
                 {{ $bet->user->name }}
             </td>
