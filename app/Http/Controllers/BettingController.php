@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class BettingController extends Controller
@@ -66,7 +67,7 @@ class BettingController extends Controller
     }
 
     public function end(): RedirectResponse {
-        if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+        if (!(Auth::check() && Session::get('admin'))) {
 			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
 		}
         $sm = Sm::active();
@@ -79,7 +80,7 @@ class BettingController extends Controller
     // This is used to keep track of the current day in the SM.
     // Update to next day when the current day is over.
     public function day(int $day): RedirectResponse {
-        if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+        if (!(Auth::check() && Session::get('admin'))) {
 			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
 		}
         $sm = Sm::active();
@@ -89,7 +90,7 @@ class BettingController extends Controller
     }
 
     public function create(Request $request): RedirectResponse {
-        if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+        if (!(Auth::check() && Session::get('admin'))) {
 			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
 		}
         $sm = Sm::create(['name' => $request->input('name'), 'day' => 1]);
@@ -97,7 +98,7 @@ class BettingController extends Controller
     }
 
     public function live(): RedirectResponse {
-		if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+		if (!(Auth::check() && Session::get('admin'))) {
 			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
 		}
         $sm = Sm::active();
@@ -106,15 +107,15 @@ class BettingController extends Controller
         return redirect('admin')->with('success', 'SM är nu live! Inga mer bets!!!');
     }
 
-    public function adjurn(): RedirectResponse {
-        if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+    public function adjourn(): RedirectResponse {
+        if (!(Auth::check() && Session::get('admin'))) {
 			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
 		}
         $sm = Sm::active();
-        $sm->adjurned = $sm->adjurned ? FALSE : TRUE;
+        $sm->adjourned = $sm->adjourned ? FALSE : TRUE;
         $sm->save();
-        if ($sm->adjurned) {
-            return redirect('admin')->with('success', 'Betting är adjungerat');
+        if ($sm->adjourned) {
+            return redirect('admin')->with('success', 'Betting är ajournerat');
         }
         return redirect('admin')->with('success', 'Betting är igång igen');
     }
@@ -124,14 +125,9 @@ class BettingController extends Controller
     }
 
 	public function getAdmin(): RedirectResponse|\Illuminate\Contracts\View\View {
-		if (!Auth::check()) { // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+		if (!(Auth::check() && Session::get('admin'))) {
 			return redirect('/')->with('error', 'Du måste vara inloggad för att komma åt adminsidan din skurk.');
 		}
-
-		// TODO: Uncomment this when we have a proper admin system in place. For now, everyone can access the admin page.
-		// if (!Auth::user()->isAdmin()) {
-		// 	return view('welcome')->with('error', 'Du har inte behörighet att komma åt adminsidan.');
-		// }
 
 		return view('admin')
             ->with('sm', Sm::active());

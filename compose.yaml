@@ -154,3 +154,13 @@ configs:
           first_name: Karin
           family_name: Klubbare
           year_tag: D-85
+
+      hive:
+        groups:
+          - name: Vice Talman
+            id: vice-talman
+            domain: example.com
+            members:
+              - turetek
+            permissions:
+              - id: admin

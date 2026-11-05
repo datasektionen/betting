@@ -22,7 +22,7 @@ class Sm extends Model {
         'name',
         'ended_at',
         'live_at',
-        'adjurned',
+        'adjourned',
         'day',
     ];
 
@@ -38,7 +38,7 @@ class Sm extends Model {
             'live_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
-            'adjurned' => 'boolean',
+            'adjourned' => 'boolean',
             'day' => 'integer',
         ];
     }

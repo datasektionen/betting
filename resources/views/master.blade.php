@@ -53,7 +53,7 @@
             @endif
             links: [
                 { str: "Hem", href: "/" },
-                @if(Auth::check())// && Auth::user()->isAdmin())  // Add AdminCheck here! Typ !Auth::user()->isAdmin()
+                @if(Auth::check() && Session::get('admin'))
                     { str: "Admin", href: "/admin" }
                 @endif
             ]
