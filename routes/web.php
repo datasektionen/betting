@@ -8,7 +8,7 @@ Route::get('/logout', [AuthController::class, 'getLogout'])->middleware('auth');
 Route::get('/login', [AuthController::class, 'getLogin']);
 Route::get('/login-complete', [AuthController::class, 'getLoginComplete']);
 
-Route::post('/sm/end/', [BettingController::class, 'end']);  // Kanske add AdminCheck here?
+Route::post('/sm/end/', [BettingController::class, 'end']);
 Route::post('/sm/day/{day}', [BettingController::class, 'day']);
 Route::post('/sm/create', [BettingController::class, 'create']);
 Route::post('/sm/live', [BettingController::class, 'live']);
