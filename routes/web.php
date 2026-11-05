@@ -8,10 +8,18 @@ Route::get('/logout', [AuthController::class, 'getLogout'])->middleware('auth');
 Route::get('/login', [AuthController::class, 'getLogin']);
 Route::get('/login-complete', [AuthController::class, 'getLoginComplete']);
 
-Route::get('/sm/end/', [BettingController::class, 'end']);
-Route::get('/sm/day/{day}', [BettingController::class, 'day']);
-Route::get('/sm/create/{name}', [BettingController::class, 'create']);
-Route::get('/sm/live', [BettingController::class, 'live']);
+Route::post('/sm/end/', [BettingController::class, 'end']);
+Route::post('/sm/day/{day}', [BettingController::class, 'day']);
+Route::post('/sm/create', [BettingController::class, 'create']);
+Route::post('/sm/live', [BettingController::class, 'live']);
+Route::post('/sm/adjourn', [BettingController::class, 'adjourn']);
+
+Route::get('/sm/end/', [BettingController::class, 'skurk']);
+Route::get('/sm/day/{day}', [BettingController::class, 'skurk']);
+Route::get('/sm/create/{name}', [BettingController::class, 'skurk']);
+Route::get('/sm/live', [BettingController::class, 'skurk']);
+Route::get('/sm/adjourn', [BettingController::class, 'skurk']);
 
 Route::get('/', [BettingController::class, 'index']);
 Route::post('/', [BettingController::class, 'bet'])->middleware('auth');
+Route::get('/admin', [BettingController::class, 'getAdmin']);

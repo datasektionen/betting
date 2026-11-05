@@ -31,6 +31,7 @@ class AuthController {
             env('OIDC_SECRET')
         );
         $this->oidc->setRedirectURL(env('REDIRECT_URL'));
+		$this->oidc->addScope(['permissions']);
     }
 
 	/**
@@ -66,6 +67,16 @@ class AuthController {
 
         $kthId = $this->oidc->getVerifiedClaims('sub');
 
+		$perms = $this->oidc->getVerifiedClaims('permissions');
+
+		foreach ($perms as $perm) {
+			if ($perm->id === 'admin') {
+				Session::put('admin', true);
+				break;
+			} else {
+				Session::put('admin', false);
+			}
+		}
 		$user = User::createIfNotExistsOrFail($kthId);
 
 		Auth::login($user);

@@ -1246,3 +1246,14 @@ span.colon {
 #content {
 	min-height: 74vh;
 }
+
+.amber button.button.theme-color:disabled,
+.amber button.button.theme-color:disabled:hover {
+    background: #D4B45C !important;
+    color: #777 !important;
+    opacity: 0.9 !important;
+    cursor: default;
+    transform: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+}

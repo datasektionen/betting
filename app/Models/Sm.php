@@ -22,6 +22,7 @@ class Sm extends Model {
         'name',
         'ended_at',
         'live_at',
+        'adjourned',
         'day',
     ];
 
@@ -37,6 +38,7 @@ class Sm extends Model {
             'live_at' => 'datetime',
             'created_at' => 'datetime',
             'updated_at' => 'datetime',
+            'adjourned' => 'boolean',
             'day' => 'integer',
         ];
     }
@@ -56,6 +58,10 @@ class Sm extends Model {
 
     public function isLive(): bool {
         return $this->live_at !== null;
+    }
+
+    public function isEnded(): bool {
+        return $this->ended_at !== null;
     }
 
     /**

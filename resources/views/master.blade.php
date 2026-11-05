@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>När slutar SM?</title>
+    <title>@yield('title', 'När slutar SM?')</title>
 
     <link href="//aurora.datasektionen.se" rel="stylesheet" type="text/css">
     <link href="/css/style.css" rel="stylesheet" type="text/css">
@@ -52,7 +52,10 @@
             login_href: "/logout",
             @endif
             links: [
-                { str: "Hem", href: "/" }
+                { str: "Hem", href: "/" },
+                @if(Auth::check() && Session::get('admin'))
+                    { str: "Admin", href: "/admin" }
+                @endif
             ]
         }
     </script>
