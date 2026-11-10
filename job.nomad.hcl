@@ -25,14 +25,14 @@ job "betting" {
         ports = ["http"]
 
         volumes = [
-          "local/nginx.conf:/etc/nginx/conf.d/default.conf"
+          "local/nginx.conf:/etc/nginx/http.d/http_proxy.conf"
         ]
       }
 
       template {
         data = <<EOF
 server {
-    listen 80;
+    listen {{ env "NOMAD_PORT_http" }};
     server_name _;
     root /var/www/html/public;
 
@@ -108,3 +108,4 @@ variable "image_tag" {
   type = string
   default = "ghcr.io/datasektionen/betting:latest"
 }
+
